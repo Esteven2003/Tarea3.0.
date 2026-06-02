@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  dbclases:
+    image: postgres:15-alpine
+    enviromment:
+      - TZ=Amarica/Guayaquil
+      - POSTGRES_DB=ejemplo1
+      - POSTGRES_USER=quinto
+      - POSTGRES_PASSWORD=123
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - pg_dbclase:/var/lib/postgresql/data/pgdata
+    network:
+      - net_dbclase
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    enviromment:
+      - PGADMIN_DEFAULT_EMAIL:bey.viracocha@yavirac.edu.ec
+      - PGADMIN_DEFAULT_PASSWORD: 12345
+    volumes:
+      - pg_pgadmin:/var/lib/pgadmin
+    network:
+volumes:
+  pg_dbclase:
+    external: true
+network:
+  net_dbclase:
+    external: true
+

@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  dbclase:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      TZ: America/Guayaquil
+      POSTGRES_DB: ejemplo1
+      POSTGRES_USER: quinto
+      POSTGRES_PASSWORD: "123"
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - pg_dbclase:/var/lib/postgresql/data/pgdata
+    networks:
+      - net_dbclase
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: bey.viracocha@yavirac.edu.ec
+      PGADMIN_DEFAULT_PASSWORD: "12345"
+    volumes:
+      - pg_pgadmin:/var/lib/pgadmin
+    networks:
+      - net_dbclase
+    ports:
+      - "8080:80"
+
+volumes:
+  pg_dbclase:
+  pg_pgadmin:
+
+networks:
+  net_dbclase:
+    external: true
