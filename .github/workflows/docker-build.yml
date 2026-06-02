@@ -34,5 +34,4 @@ jobs:
         with:
           context: .
           push: true
-          # 👇 Aquí cambiamos github.repository_owner por env.OWNER_LC que ya está en minúsculas
           tags: ghcr.io/${{ env.OWNER_LC }}/mi-calculadora:latest
