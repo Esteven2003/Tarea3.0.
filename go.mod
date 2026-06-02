@@ -1,3 +1,3 @@
-module ejemplo/go-app
+module mi-calculadora
 
-go 1.21
+go 1.22

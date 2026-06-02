@@ -1,16 +1,12 @@
-# Etapa 1: Compilar la aplicación Go
-FROM golang:1.21-alpine AS builder
+# Etapa 1: Compilar el código de Go
+FROM golang:1.22-alpine AS builder
 WORKDIR /app
-COPY . .
-# Deshabilitamos CGO para obtener un binario estático y más ligero
-RUN CGO_ENABLED=0 GOOS=linux go build -o mi-accion main.go
+COPY go.mod main.go ./
+RUN CGO_ENABLED=0 GOOS=linux go build -o calculadora .
 
-# Etapa 2: Imagen mínima para ejecutar la acción
+# Etapa 2: Crear la imagen final ligera
 FROM alpine:latest
-# GitHub Actions requiere ciertas herramientas básicas que Alpine ya trae
-RUN apk add --no-cache ca-certificates
-
-COPY --from=builder /app/mi-accion /mi-accion
-
-# El ENTRYPOINT le dice a Docker qué ejecutar cuando inicie el contenedor
-ENTRYPOINT ["/mi-accion"]
+WORKDIR /root/
+COPY --from=builder /app/calculadora .
+EXPOSE 8080
+CMD ["./calculadora"]

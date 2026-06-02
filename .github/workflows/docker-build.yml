@@ -1,0 +1,32 @@
+name: Contenedor
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write # Permiso clave para poder subir la imagen
+
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v4
+
+      - name: Iniciar sesión en GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Construir y Subir Imagen
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          # Reemplaza 'mi-usuario' por tu nombre de usuario de GitHub en minúsculas en tu mente, 
+          # pero esta variable ${{ github.repository_owner }} lo hace automático:
+          tags: ghcr.io/${{ github.repository_owner }}/mi-calculadora:latest
